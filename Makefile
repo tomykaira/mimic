@@ -37,6 +37,10 @@ architecture:
 	cd linker; make
 	cd compiler; make
 
+tools:
+	cd assembler; make
+	cd simulator; make
+
 architecture-clean:
 	cd assembler; make clean
 	cd simulator; make clean
@@ -65,7 +69,6 @@ min-rt-run:
 min-rt-clean:
 	rm $(MIN_RT_DIR)min-rt.s
 	rm $(MIN_RT_DIR)min-rt.bin
-	
 
 #--------------------------------------------------------------------
 # その他ファイルのコンパイル
@@ -78,6 +81,7 @@ min-rt-clean:
 
 # .bin, .sが存在しててもビルドした上で実行する
 %.run_f:
+	make tools
 	make $*.bin_f
 	simulator/simulator $*.bin
 

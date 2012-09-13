@@ -1,6 +1,6 @@
-./assembler/assembler
-./simulator/simulator
-./compiler/min-caml
+assembler/assembler
+simulator/simulator
+compiler/min-caml
 *.o
 ._d/
 ._ncdi
