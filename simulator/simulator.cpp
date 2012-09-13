@@ -260,7 +260,7 @@ int simulate(char* srcPath)
 		assert(rom_addr(pc) >= 0);
 		inst = ROM[rom_addr(pc)];
 
-    D_INSTRUCTION("%08x\n", inst);
+    D_INSTRUCTION("INST: %08x\n", inst);
 
 		opcode = get_opcode(inst);
 		funct = get_funct(inst);

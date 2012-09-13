@@ -5,11 +5,11 @@ base=`basename $arg`
 root_log="$base"_simulation.log
 make $arg.bin_f
 simulator/simulator $arg.bin > $root_log
-echo "grep"
-cat $root_log | grep "^inst" > "$base"_inst.log
-echo "grep"
+echo "grep INST"
+cat $root_log | grep "^INST" > "$base"_inst.log
+echo "grep REG"
 cat $root_log | grep "^REG" > "$base"_reg.log
-echo "grep"
+echo "grep MEM"
 cat $root_log | grep "^MEM" > "$base"_mem.log
 echo "file copy"
 cp $arg.bin ../mips/instruction.dat
