@@ -13,3 +13,7 @@ echo "grep MEM"
 cat $root_log | grep "^MEM" > "$base"_mem.log
 echo "file copy"
 cp $arg.bin ../mips/instruction.dat
+lines=`wc $arg.bin | awk '{ print $1 }'`
+size=`expr $lines + 1`
+sed ../mips/instruction_memory.v -e "s/MEM_SIZE=.*;/MEM_SIZE=$size;/" > inst.v
+mv inst.v ../mips/instruction_memory.v
