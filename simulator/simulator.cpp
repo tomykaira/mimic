@@ -283,67 +283,67 @@ int simulate(char* srcPath)
 		switch(opcode)
 		{
 			case ADD:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), IRS + IRT);
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), IRS + IRT);
 				IRD = IRS + IRT;
 				break;
 			case SUB:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), IRS - IRT);
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), IRS - IRT);
 				IRD = IRS - IRT;
 				break;
 			case MUL:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), IRS * IRT);
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), IRS * IRT);
 				IRD = IRS * IRT;
 				break;
 			case AND:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), IRS & IRT);
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), IRS & IRT);
 				IRD = IRS & IRT;
 				break;
 			case OR:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), IRS | IRT);
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), IRS | IRT);
 				IRD = IRS | IRT;
 				break;
 			case NOR:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), ~(IRS | IRT));
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), ~(IRS | IRT));
 				IRD = ~(IRS | IRT);
 				break;
 			case XOR:
-				D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), IRS ^ IRT);
+				D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), IRS ^ IRT);
 				IRD = IRS ^ IRT;
 				break;
 			case ADDI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS + IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS + IMM);
 				IRT = IRS + IMM;
 				break;
 			case SUBI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS - IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS - IMM);
 				IRT = IRS - IMM;
 				break;
 			case MULI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS * IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS * IMM);
 				IRT = IRS * IMM;
 				break;
 			case SLLI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS << IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS << IMM);
 				IRT = IRS << IMM;
 				break;
 			case SRAI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS >> IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS >> IMM);
 				IRT = IRS >> IMM;
 				break;
 			case ANDI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS & IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS & IMM);
 				IRT = IRS & IMM;
 				break;
 			case ORI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS | IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS | IMM);
 				IRT = IRS | IMM;
 				break;
 			case NORI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), ~(IRS | IMM));
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), ~(IRS | IMM));
 				IRT = ~(IRS | IMM);
 				break;
 			case XORI:
-				D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), IRS ^ IMM);
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRS ^ IMM);
 				IRT = IRS ^ IMM;
 				break;
 			case FADD:
@@ -377,11 +377,11 @@ int simulate(char* srcPath)
 				memcpy(&IRT, &FRS, 4);
 				break;
 			case MVLO:
-        D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), (IRT & 0xffff0000) | (IMM & 0xffff));
+        D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), (IRT & 0xffff0000) | (IMM & 0xffff));
 				IRT = (IRT & 0xffff0000) | (IMM & 0xffff);
 				break;
 			case MVHI:
-        D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), ((uint32_t)IMM << 16) | (IRT & 0xffff));
+        D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), ((uint32_t)IMM << 16) | (IRT & 0xffff));
 				IRT = ((uint32_t)IMM << 16) | (IRT & 0xffff);
 				break;
 			case FMVLO:
@@ -429,7 +429,7 @@ int simulate(char* srcPath)
 				pc = internal_stack[stack_pointer--];
 				break;
 			case LDR:
-        D_DATAFLOW("REG: %02x %08x\n", get_rd(inst), RAM[(IRS + IRT)]);
+        D_DATAFLOW("REG: %02X %08X\n", get_rd(inst), RAM[(IRS + IRT)]);
 				assert(IRS + IRT >= 0);
 				IRD = RAM[(IRS + IRT)];
 				break;
@@ -443,7 +443,7 @@ int simulate(char* srcPath)
 				RAM[(IRS + IMM)] = IRT;
 				break;
 			case LDI:
-        D_DATAFLOW("REG: %02x %08x\n", get_rt(inst), RAM[(IRS + IMM)]);
+        D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), RAM[(IRS + IMM)]);
 				assert(IRS + IMM >= 0);
 				IRT = RAM[(IRS + IMM)];
 				break;
