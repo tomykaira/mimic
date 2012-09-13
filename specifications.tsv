@@ -1,0 +1,77 @@
+アーキテクチャ名	mimic
+バイナリファイルのエンディアン	リトルエンディアン
+ROM（命令メモリを格納する領域）サイズ	64KB(固定)
+ROMアドレッシング	ワードアドレッシング
+RAM（プログラム実行時の作業用領域）サイズ	8.00
+RAMアドレッシング	ワードアドレッシング
+コメントアウト記号	#
+整数レジスタ接頭辞	$r
+浮動小数レジスタ接頭辞	$f
+整数レジスタ数	32
+浮動小数レジスタ数	32
+キャッシュに使う浮動小数レジスタ数	16
+ゼロレジスタ	$r0
+フレームレジスタ	$r1
+ヒープレジスタ	$r2
+リンクレジスタ	なし(内部)
+1固定レジスタ	$r30
+-1固定レジスタ	$r31
+
+
+命令形式
+R	op(6bit)	rs(5bit)	rt(5bit)	rd(5bit)	shamt(5bit)	funct(5bit)
+I	op(6bit)	rs(5bit)	rt(5bit)	imm(16bit)
+J	op(6bit)	target(26bit)
+
+
+命令名	説明	命令形式	アセンブリ形式	擬似コード	op						funct
+add	たし算	R	add rd, rs, rt	ird <- irs + irt	0	0	0	0	0	0
+sub	ひき算	R	sub rd, rs, rt	ird <- irs - irt	0	0	0	0	0	1
+mul	かけ算	R	mul rd, rs, rt	ird <- irs * irt	0	0	0	0	1	0
+and	論理積	R	and rd, rs, rt	ird <- irs & irt	0	0	0	0	1	1
+or	論理和	R	or rd, rs, rt	ird <- irs | irt	0	0	0	1	0	0
+nor	論理否定和	R	nor rd, rs, rt	ird <- irs nor irt	0	0	0	1	0	1
+xor	排他的論理和	R	xor rd, rs, rt	ird <- irs xor irt	0	0	0	1	1	0
+mvlo	下位16bitに即値代入	I	mvlo rs, imm	irt[0:15] <- imm	0	1	0	0	0	0
+mvhi	上位16bitに即値代入	I	mvhi rs, imm	irt[16:31] <- imm	0	1	0	0	0	1
+addi	たし算	I	addi rt, rs, imm	irt <- irs + imm	0	0	1	0	0	0
+subi	ひき算	I	subi rt, rs, imm	irt <- irs - imm	0	0	1	0	0	1
+muli	かけ算	I	muli rt, rs, imm	irt <- irs * imm	0	0	1	0	1	0
+slli	論理左シフト	I	slli rt, rs, imm	irt <- irs << imm	0	1	0	1	0	0
+srai	算術右シフト	I	srai rt, rs, imm	irt <- irs >> imm	0	1	0	1	0	1
+andi	論理積	I	andi rt, rs, imm	irt <- irs & imm	0	0	1	0	1	1
+ori	論理和	I	ori rt, rs, imm	irt <- irs | imm	0	0	1	1	0	0
+nori	論理否定和	I	nori rt, rs, imm	irt <- irs nor imm	0	0	1	1	0	1
+xori	排他的論理和	I	xori rt, rs, imm	irt <- irs xor imm	0	0	1	1	1	0
+fmov	値の複製	R	fmov frt, frs	frd <- frs	1	1	0	0	0	0
+fneg	符号反転	R	fneg frt, frs	frd <- -frs	1	1	0	0	0	1
+fmvlo	下位16bitに即値代入	I	fmvlo frs, imm	frt[0:15] <- imm	0	1	0	0	1	0
+fmvhi	上位16bitに即値代入	I	fmvhi frs, imm	frt[16:31] <- imm	0	1	0	0	1	1
+fadd	たし算	R	fadd frd, frs, frt	frd <- frs + frt	1	1	0	0	1	0
+fsub	ひき算	R	fsub frd, frs, frt	frd <- frs - frt	1	1	0	0	1	1
+fmul	かけ算	R	fmul frd, frs, frt	frd <- frs * frt	1	1	0	1	0	0
+fmuln	かけ算して符号反転	R	fmuln frd, frs, frt	frd <- -(frs * frt)	1	1	0	1	0	1
+fdiv	わり算	R	fdiv frd, frs, frt	frd <- frs / frt	1	1	0	1	1	0
+fsqrt	絶対値	R	fsqrt frt, frs	frd <- fabs(frs)	1	1	0	1	1	1
+imovf	バイナリ列をコピー	R	imovf frt, rs	frt <- irs	0	1	0	1	1	0
+fmovi	バイナリ列をコピー	R	fmovi rt, frs	irt <- frs	0	1	0	1	1	1
+ldi	メモリから整数レジスタへロード	I	ldi rt, rs, imm	irt <- RAM[irs + imm]	1	0	1	0	0	0
+sti	整数レジスタをメモリへストア	I	sti rt, rs, imm	RAM[irs + imm] <- irt	1	0	1	0	0	1
+ldr	メモリから整数レジスタへロード	R	ldr rd, rs, rt	ird <- RAM[irs + irt]	1	0	1	1	0	0
+fldi	メモリから浮動小数レジスタへロード	I	fldi frt, rs, imm	frt <- RAM[irs + imm]	1	0	1	0	1	0
+fsti	浮動小数レジスタをメモリへストア	I	fsti frt, rs, imm	RAM[irs + imm] <- frt	1	0	1	0	1	1
+fldr	メモリから浮動小数レジスタへロード	R	fldr frd, rs, rt	frd <- RAM[irs + irt]	1	0	1	1	1	0
+beq	等しい	I	beq rs, rt, imm	if irs == irt then goto (pc + imm)	1	0	0	0	0	0
+blt	より小さい	I	blt rs, rt, imm	if irs < irt then goto (pc + imm)	1	0	0	0	0	1
+ble	より大きい	I	ble rs, rt, imm	if irs > irt then goto (pc + imm)	1	0	0	0	1	0
+fbeq	等しい	I	fbeq frs, frt, imm	if frs == frt then goto (pc + imm)	1	0	0	1	0	0
+fblt	より小さい	I	fblt frs, frt, imm	if frs < frt then goto (pc + imm)	1	0	0	1	0	1
+fble	より大きい	I	fble frs, frt, imm	if frs > frt then goto (pc + imm)	1	0	0	1	1	0
+j	ラベルへジャンプ	J	j labelName	goto labelName	1	1	1	0	0	0
+jr	レジスタ値へジャンプ	R	jr rs	goto irs	1	1	1	0	0	1
+call	フレームポインタを減らして リンクしてラベルへジャンプ	J	call labelName	RAM[frame pointer] <- link register; frame pointer--; link register <- pc goto labelName	1	1	1	0	1	0
+callr	フレームポインタを減らして リンクしてレジスタ値へジャンプ	R	callr reg	RAM[frame pointer] <- link register; frame pointer--; link register <- pc goto irs	1	1	1	0	1	1
+return	フレームポインタを増やして リンクレジスタの値へジャンプ	R	return op	RAM[frame pointer] <- link register; frame pointer++; goto link register	1	1	1	1	0	0
+inputb	1byte読み込み	R	inputb rs	irt <- ReadByte()	1	1	1	1	0	1
+outputb	1byte書き出し	R	outputb rs	WriteByte(irt & 0xf)	1	1	1	1	1	0
+halt	プログラムを終了	R	halt	stop	1	1	1	1	1	1
