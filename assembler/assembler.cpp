@@ -299,6 +299,7 @@ int main(int argc, char** argv)
 	else
 	{
 		cerr << "couldn't assemble " << argv[src] << endl;
+		return 1;
 	}
 
 	return 0;

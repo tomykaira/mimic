@@ -487,8 +487,6 @@ int main(int argc, char** argv)
 	
 	cerr << "<simulate> ";
 	
-	simulate(argv[1]);
-
-	return 0;
+	return simulate(argv[1]);
 }
 
