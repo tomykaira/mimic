@@ -458,6 +458,7 @@ int simulate(char* srcPath)
 				break;
 			case INPUTB:
 				IRT = getchar() & 0xff;
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRT);
 				break;
 			case OUTPUTB:
         D_IO("%c", (char)IRT);
