@@ -43,7 +43,7 @@
 #define FSUB (0b110011)
 #define FMUL (0b110100)
 #define FMULN (0b110101)
-#define FDIV (0b110110)
+#define FINV (0b110110)
 #define FSQRT (0b110111)
 #define FMOV (0b110000)
 #define FNEG (0b110001)

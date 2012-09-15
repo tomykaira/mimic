@@ -180,7 +180,8 @@ and g' oc = function
 		Output.add_stmt (Output.FMul (x, y, z))
 
 	| NonTail(x), FDiv(y, z) ->
-		Output.add_stmt (Output.FDiv (x, y, z))
+		Output.add_stmt (Output.FInv (reg_fsw, z));
+		Output.add_stmt (Output.FMul (x, y, reg_fsw))
 
 	| NonTail(x), LdF(y, V(z)) ->
 		Output.add_stmt (Output.LdF (x, y, z))

@@ -358,8 +358,8 @@ int simulate(char* srcPath)
 			case FMULN:
 				FRD = myfmul(FRS, -FRT);
 				break;
-			case FDIV:
-				FRD = myfdiv(FRS, FRT);
+			case FINV:
+				FRD = myfinv(FRS);
 				break;
 			case FSQRT:
 				FRD = myfsqrt(FRS);

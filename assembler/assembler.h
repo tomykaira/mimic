@@ -52,7 +52,7 @@ PROTO_R(_fadd);
 PROTO_R(_fsub);
 PROTO_R(_fmul);
 PROTO_R(_fmuln);
-PROTO_R(_fdiv);
+PROTO_R(_finv);
 PROTO_R(_fsqrt);
 PROTO_R(_fmov);
 PROTO_R(_fneg);

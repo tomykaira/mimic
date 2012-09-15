@@ -20,7 +20,7 @@ DEFINE_R(_fadd, FADD, 0, 0);
 DEFINE_R(_fsub, FSUB, 0, 0);
 DEFINE_R(_fmul, FMUL, 0, 0);
 DEFINE_R(_fmuln, FMULN, 0, 0);
-DEFINE_R(_fdiv, FDIV, 0, 0);
+DEFINE_R(_finv, FINV, 0, 0);
 DEFINE_R(_fsqrt, FSQRT, 0, 0);
 DEFINE_R(_fmov, FMOV, 0, 0);
 DEFINE_R(_fneg, FNEG, 0, 0);
@@ -269,12 +269,12 @@ bool encode(char* instName, char* buffer, map<uint32_t, string>& labelNames, uin
 			return true;
 		}
 	}
-	if (eq(instName, "fdiv"))
+	if (eq(instName, "finv"))
 	{
-		int n = sscanf(buffer, formFFF, dummy, &rd, &rs, &rt);
-		if (n == 4)
+		int n = sscanf(buffer, formFF, dummy, &rd, &rs);
+		if (n == 3)
 		{
-			code = _fdiv(rs, rt, rd);
+			code = _finv(rs, rt, rd);
 			return true;
 		}
 	}
