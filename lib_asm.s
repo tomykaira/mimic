@@ -166,7 +166,7 @@ FTOI_RET:
 FTOI_SMALL:
 	fadd $f0, $f0, $f2
 	fmovi $r3, $f0
-	sub $r3, $r3, $r0
+	sub $r3, $r3, $r4
 	return
 FTOI_NEGATIVE_MAIN:
 	fneg $f0, $f0
