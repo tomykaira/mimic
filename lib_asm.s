@@ -159,15 +159,13 @@ FTOI_LOOP:
 	j FTOI_LOOP
 FTOI_RET:
 	fadd $f0, $f0, $f2
-	fsti $f0, $r1, 0
-	ldi $r5, $r1, 0
+	fmovi $r5, $f0
 	sub $r5, $r5, $r4
 	add $r3, $r5, $r3
 	return
 FTOI_SMALL:
 	fadd $f0, $f0, $f2
-	fsti $f0, $r1, 0
-	ldi $r3, $r1, 0
+	fmovi $r3, $f0
 	sub $r3, $r3, $r4
 	return
 FTOI_NEGATIVE_MAIN:
