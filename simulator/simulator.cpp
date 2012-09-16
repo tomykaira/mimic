@@ -39,7 +39,7 @@ uint32_t lreg;
 
 #define DEBUG_INSTRUCTION 1
 #define DEBUG_DATAFLOW    1
-#define DEBUG_IO          0
+#define DEBUG_IO          1
 
 #define D_INSTRUCTION if (DEBUG_INSTRUCTION) printf
 #define D_DATAFLOW if (DEBUG_DATAFLOW) printf
@@ -347,33 +347,43 @@ int simulate(char* srcPath)
 				IRT = IRS ^ IMM;
 				break;
 			case FADD:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfadd(FRS, FRT));
 				FRD = myfadd(FRS, FRT);
 				break;
 			case FSUB:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfsub(FRS, FRT));
 				FRD = myfsub(FRS, FRT);
 				break;
 			case FMUL:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfmul(FRS, FRT));
 				FRD = myfmul(FRS, FRT);
 				break;
 			case FMULN:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfmul(FRS, -FRT));
 				FRD = myfmul(FRS, -FRT);
 				break;
 			case FINV:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfinv(FRS));
 				FRD = myfinv(FRS);
 				break;
 			case FSQRT:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfsqrt(FRS));
 				FRD = myfsqrt(FRS);
 				break;
 			case FMOV:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), FRS);
 				FRD = FRS;
 				break;
 			case FNEG:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), myfneg(FRS));
 				FRD = myfneg(FRS);
 				break;
 			case IMOVF:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rt(inst), IRS);
 				memcpy(&FRT, &IRS, 4);
 				break;
 			case FMOVI:
+				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), FRS);
 				memcpy(&IRT, &FRS, 4);
 				break;
 			case MVLO:
@@ -461,7 +471,7 @@ int simulate(char* srcPath)
 				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRT);
 				break;
 			case OUTPUTB:
-        D_IO("%c", (char)IRT);
+        D_IO("IO: %c\n", (char)IRT);
 				break;
 			case HALT:
 				break;
