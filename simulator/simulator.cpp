@@ -395,9 +395,11 @@ int simulate(char* srcPath)
 				IRT = ((uint32_t)IMM << 16) | (IRT & 0xffff);
 				break;
 			case FMVLO:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rt(inst), (FRT & 0xffff0000) | (IMM & 0xffff));
 				FRT = (FRT & 0xffff0000) | (IMM & 0xffff);
 				break;
 			case FMVHI:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rt(inst), ((uint32_t)IMM << 16) | (FRT & 0xffff));
 				FRT = ((uint32_t)IMM << 16) | (FRT & 0xffff);
 				break;
 			case J:
@@ -444,6 +446,7 @@ int simulate(char* srcPath)
 				IRD = RAM[(IRS + IRT)];
 				break;
 			case FLDR:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rd(inst), RAM[(IRS + IRT)]);
 				assert(IRS + IRT >= 0);
 				FRD = RAM[(IRS + IRT)];
 				break;
@@ -463,6 +466,7 @@ int simulate(char* srcPath)
 				RAM[(IRS + IMM)] = FRT;
 				break;
 			case FLDI:
+				D_DATAFLOW("REG: f%02X %08X\n", get_rt(inst), RAM[(IRS + IMM)]);
 				assert(IRS + IMM >= 0);
 				FRT = RAM[(IRS + IMM)];
 				break;
