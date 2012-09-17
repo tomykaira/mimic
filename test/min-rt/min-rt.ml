@@ -487,14 +487,14 @@ in
 let rec read_screen_settings _ =
   
   (* スクリーン中心の座標 *)
-  screen.(0) <- read_float ();
-  screen.(1) <- read_float ();
-  screen.(2) <- read_float ();
+  screen.(0) <- min_caml_read_float ();
+  screen.(1) <- min_caml_read_float ();
+  screen.(2) <- min_caml_read_float ();
   (* 回転角 *)
-  let v1 = rad (read_float ()) in
+  let v1 = rad (min_caml_read_float ()) in
   let cos_v1 = cos v1 in
   let sin_v1 = sin v1 in
-  let v2 = rad (read_float ()) in
+  let v2 = rad (min_caml_read_float ()) in
   let cos_v2 = cos v2 in
   let sin_v2 = sin v2 in
   (* スクリーン面の奥行き方向のベクトル 注視点からの距離200をかける *)
@@ -519,19 +519,19 @@ in
 (* 光源情報の読み込み *)
 let rec read_light _ =
    
-  let nl = read_int () in
+  let nl = min_caml_read_int () in
 
   (* 光線関係 *)
-  let l1 = rad (read_float ()) in
+  let l1 = rad (min_caml_read_float ()) in
   let sl1 = sin l1 in
   light.(1) <- fneg sl1;
-  let l2 = rad (read_float ()) in
+  let l2 = rad (min_caml_read_float ()) in
   let cl1 = cos l1 in
   let sl2 = sin l2 in
   light.(0) <- cl1 *. sl2;
   let cl2 = cos l2 in
   light.(2) <- cl1 *. cl2;
-  beam.(0) <- read_float ()
+  beam.(0) <- min_caml_read_float ()
 
 in
 
@@ -582,40 +582,40 @@ in
 (**** オブジェクト1つのデータの読み込み ****)
 let rec read_nth_object n =
 
-  let texture = read_int () in                      
+  let texture = min_caml_read_int () in                      
   if texture <> -1 then
     ( 
-      let form = read_int () in                     
-      let refltype = read_int () in
-      let isrot_p = read_int () in
+      let form = min_caml_read_int () in                     
+      let refltype = min_caml_read_int () in
+      let isrot_p = min_caml_read_int () in
 
       let abc = Array.create 3 0.0 in
-      abc.(0) <- read_float ();
-      abc.(1) <- read_float (); (* 5 *)
-      abc.(2) <- read_float ();
+      abc.(0) <- min_caml_read_float ();
+      abc.(1) <- min_caml_read_float (); (* 5 *)
+      abc.(2) <- min_caml_read_float ();
 
       let xyz = Array.create 3 0.0 in
-      xyz.(0) <- read_float ();
-      xyz.(1) <- read_float ();
-      xyz.(2) <- read_float ();
+      xyz.(0) <- min_caml_read_float ();
+      xyz.(1) <- min_caml_read_float ();
+      xyz.(2) <- min_caml_read_float ();
 
-      let m_invert = fisneg (read_float ()) in (* 10 *)
+      let m_invert = fisneg (min_caml_read_float ()) in (* 10 *)
 
       let reflparam = Array.create 2 0.0 in      
-      reflparam.(0) <- read_float (); (* diffuse *)
-      reflparam.(1) <- read_float (); (* hilight *)
+      reflparam.(0) <- min_caml_read_float (); (* diffuse *)
+      reflparam.(1) <- min_caml_read_float (); (* hilight *)
        
       let color = Array.create 3 0.0 in
-      color.(0) <- read_float ();
-      color.(1) <- read_float ();
-      color.(2) <- read_float (); (* 15 *)
+      color.(0) <- min_caml_read_float ();
+      color.(1) <- min_caml_read_float ();
+      color.(2) <- min_caml_read_float (); (* 15 *)
      
       let rotation = Array.create 3 0.0 in
       if isrot_p <> 0 then
 	(
-	 rotation.(0) <- rad (read_float ());
-	 rotation.(1) <- rad (read_float ());
-	 rotation.(2) <- rad (read_float ())
+	 rotation.(0) <- rad (min_caml_read_float ());
+	 rotation.(1) <- rad (min_caml_read_float ());
+	 rotation.(2) <- rad (min_caml_read_float ())
 	) 
       else ();
 
@@ -680,7 +680,7 @@ in
 
 (* ネットワーク1つを読み込みベクトルにして返す *)
 let rec read_net_item length =
-  let item = read_int () in
+  let item = min_caml_read_int () in
   if item = -1 then Array.create (length + 1) (-1)
   else
     let v = read_net_item (length + 1) in
