@@ -9,22 +9,6 @@ let test x y =
   escapeq 0.0 0.0 200
 ;;
 
-(* let mandelbrot ulx uly lrx lry w h = *)
-(*   let rec render ulx y lrx lry xs ys = *)
-(*     let rec line x rx y xs = *)
-(*       if x >= rx then ["\n"] *)
-(*       else (if (test x y) then " " else "#") :: line (x +. xs) rx y xs *)
-(*     in *)
-
-(*     if y <= lry then (line ulx lrx y xs) *)
-(*     else List.append (line ulx lrx y xs) (render ulx (y +. ys) lrx lry xs ys) *)
-(*   in *)
-
-
-(*   let step l r i = (r -. l) /. i in *)
-(*   render ulx uly lrx lry (step ulx lrx w) (step uly lry h) *)
-(* ;; *)
-
 let mandelbrot start_x start_y step_x step_y end_x end_y =
   let rec loop_y y =
     let rec loop_x x =
