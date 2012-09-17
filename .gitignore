@@ -7,3 +7,7 @@ compiler/min-caml
 *.bin
 *.class
 __tmp__.*
+*.s
+*.cmi
+*.cmo
+*.log
