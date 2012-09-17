@@ -39,6 +39,6 @@ let mandelbrot start_x start_y step_x step_y end_x end_y =
 ;;
 
 print_char 'P'; print_char '1'; print_newline () ;;
-print_int 500; print_char ' '; print_int 500; print_newline () ;; (* XxY*)
+print_int 301; print_char ' '; print_int 201; print_newline () ;; (* XxY*)
 print_int 255; print_newline () ;;
-mandelbrot (-.2.0) (-.1.0) 0.05 0.05 (1.0) (1.0)
+mandelbrot (-.2.0) (-.1.0) 0.01 0.01 (1.0) (1.0)
