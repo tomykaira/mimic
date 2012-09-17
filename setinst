@@ -16,7 +16,7 @@ echo "grep REG"
 cat $root_log | grep "^REG" > "$base"_reg.log || /bin/true
 echo "grep MEM"
 cat $root_log | grep "^MEM" > "$base"_mem.log || /bin/true
-grep IO $root_log
+# grep IO $root_log
 echo "file copy"
 cp $arg.bin ../mips/instruction.dat
 size=`wc $arg.bin | awk '{ print $1 }'`

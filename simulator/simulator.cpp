@@ -37,10 +37,10 @@ uint32_t lreg;
 // いいかげんな call stack
 #define CALL_STACK_SIZE 64
 
-#define DEBUG_INSTRUCTION 1
-#define DEBUG_DATAFLOW    1
-#define DEBUG_IO          1
-#define NO_DEBUG          0
+#define DEBUG_INSTRUCTION 0
+#define DEBUG_DATAFLOW    0
+#define DEBUG_IO          0
+#define NO_DEBUG          1
 
 #define D_INSTRUCTION if (DEBUG_INSTRUCTION) printf
 #define D_DATAFLOW if (DEBUG_DATAFLOW) printf
@@ -419,6 +419,7 @@ int simulate(char* srcPath)
 				if (asF(FRS) == asF(FRT)) pc += IMM + (-1);
 				break;
 			case FBLT:
+				printf("fblt pc: %d, %f %f %d\n", pc, asF(FRS), asF(FRT), asF(FRS) < asF(FRT));
 				if (asF(FRS) < asF(FRT)) pc += IMM + (-1);
 				break;
 			case FBLE:
