@@ -409,9 +409,11 @@ int main(int argc, char** argv)
 		cerr << "usage: ./simulator binaryfile" << endl;
 		return 1;
 	}
+
+	load_tables();
 	
 	cerr << "<simulate> ";
-	
+
 	return simulate(argv[1]);
 }
 

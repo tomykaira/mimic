@@ -28,7 +28,8 @@ ull fsqrt_table[MAX_KEY];
 
 void load_tables()
 {
-	FILE * fp = fopen("finv.dat", "r");
+	// not easy to use relative path in C
+	FILE * fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/finv.dat", "r");
 	if (fp) {
 		for (int i = 0; i<MAX_KEY; i++) {
 			if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
@@ -44,7 +45,7 @@ void load_tables()
 		exit(1);
 	}
 
-	fp = fopen("fsqrt.dat", "r");
+	fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/fsqrt.dat", "r");
 	if (fp) {
 		for (int i = 0; i<MAX_KEY; i++) {
 			if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
@@ -189,12 +190,11 @@ uint32_t myfdiv(uint32_t rs, uint32_t rt)
 	NOT_IMPLEMENTED;
 }
 
-uint32_t myfinv(uint32_t rs){
+uint32_t myfinv(uint32_t rs)
+{
 	conv c, s;
 	c.i = rs;
 	s.f = 1 / c.f;
-	return s.i;
-
 
 	unsigned int a = rs;
   int key = (a >> 13) & 0x3ff;
@@ -215,6 +215,9 @@ uint32_t myfinv(uint32_t rs){
   answer = a&(1LL<<31LL);
   answer |= ((a & 0x7fffff) == 0 ? be + 128 : be+127)<<23;
   answer |= (a & 0x7fffff) == 0 ? 0 : b&((1<<23)-1);
+
+  assert(abs((signed)s.i - (signed)answer) < 8);
+
   return answer;
 }
 
@@ -223,7 +226,6 @@ uint32_t myfsqrt(uint32_t rs)
 	conv c, s;
 	c.i = rs;
 	s.f = sqrt(c.f);
-	return s.i;
 
 	unsigned int a = rs;
   assert(! (a&0x80000000)); // not minus
@@ -239,6 +241,8 @@ uint32_t myfsqrt(uint32_t rs)
   int exponent = (63 + ((((a >> 23)&F(8)) + 1) >> 1));
 
   answer = (exponent << 23) + (mantissa & F(23));
+
+  assert(abs(s.i - answer) < 8);
 
   return answer;
 }

@@ -7,6 +7,8 @@
 
 typedef union{	uint32_t i; float f;} conv;
 
+void load_tables();
+
 uint32_t myfadd(uint32_t rs, uint32_t rt);
 uint32_t myfsub(uint32_t rs, uint32_t rt);
 uint32_t myfmul(uint32_t rs, uint32_t rt);
