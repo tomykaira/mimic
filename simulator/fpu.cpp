@@ -12,11 +12,54 @@
 #define F(x) ((1 << x) - 1)
 #define MANTISSA_ONLY(x) ((((x) & F(23)) + (127 << 23)))
 
+// table
+#define CONST(table) ((table) >> 13)
+#define INC(table) ((table) & F(13))
+#define MAX_KEY 1024
+
 using namespace std;
 
 typedef long long ll;
 typedef unsigned long long ull;
 typedef unsigned int ui;
+
+ull finv_table[MAX_KEY];
+ull fsqrt_table[MAX_KEY];
+
+void load_tables()
+{
+	FILE * fp = fopen("finv.dat", "r");
+	if (fp) {
+		for (int i = 0; i<MAX_KEY; i++) {
+			if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
+				cerr << "Not enough finv table" << endl;
+			}
+		}
+		if (fclose(fp) != 0) {
+			perror("fclose finv.dat");
+			exit(1);
+		}
+	} else {
+		perror("fopen finv.dat");
+		exit(1);
+	}
+
+	fp = fopen("fsqrt.dat", "r");
+	if (fp) {
+		for (int i = 0; i<MAX_KEY; i++) {
+			if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
+				cerr << "Not enough finv table" << endl;
+			}
+		}
+		if (fclose(fp) != 0) {
+			perror("fclose fsqrt.dat");
+			exit(1);
+		}
+	} else {
+		perror("fopen fsqrt.dat");
+		exit(1);
+	}
+}
 
 uint32_t myfadd(uint32_t rs, uint32_t rt)
 {
@@ -146,16 +189,22 @@ uint32_t myfdiv(uint32_t rs, uint32_t rt)
 	NOT_IMPLEMENTED;
 }
 
-unsigned int finv(uint32_t rs){
+uint32_t myfinv(uint32_t rs){
+	conv c, s;
+	c.i = rs;
+	s.f = 1 / c.f;
+	return s.i;
+
+
 	unsigned int a = rs;
   int key = (a >> 13) & 0x3ff;
   int a1=MANTISSA(a)&((1<<13)-1);
   int e=EXP(a);
 
   // 初期状態で 23 桁のみ
-  ll b=const_table[key];
+  ll b = CONST(finv_table[key]);
 
-  b -= (a1*inc_table[key])>>13;
+  b -= (a1*INC(finv_table[key]))>>13;
 
   // ここは適当かどうか自信がない
   int be = - e - 1;
@@ -171,6 +220,11 @@ unsigned int finv(uint32_t rs){
 
 uint32_t myfsqrt(uint32_t rs)
 {
+	conv c, s;
+	c.i = rs;
+	s.f = sqrt(c.f);
+	return s.i;
+
 	unsigned int a = rs;
   assert(! (a&0x80000000)); // not minus
 
@@ -178,8 +232,8 @@ uint32_t myfsqrt(uint32_t rs)
   int key = (a >> 14) & F(10);
   ll a1 = ((a & (1 << 23)) ? MANTISSA(a) : MANTISSA(a) << 1) & F(15);
 
-  ui i_constant = const_table[key] << 1;
-  ui diff = (a1 * inc_table[key]) >> 14;
+  ui i_constant = CONST(fsqrt_table[key]) << 1;
+  ui diff = (a1 * INC(fsqrt_table[key])) >> 14;
 
   ll mantissa = i_constant + diff;
   int exponent = (63 + ((((a >> 23)&F(8)) + 1) >> 1));
