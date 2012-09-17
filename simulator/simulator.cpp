@@ -323,7 +323,6 @@ int simulate(char* srcPath)
 				if (asF(FRS) == asF(FRT)) pc += IMM + (-1);
 				break;
 			case FBLT:
-				printf("fblt pc: %d, %f %f %d\n", pc, asF(FRS), asF(FRT), asF(FRS) < asF(FRT));
 				if (asF(FRS) < asF(FRT)) pc += IMM + (-1);
 				break;
 			case FBLE:

@@ -11,12 +11,14 @@ in
 let rec mandelbrot start_x start_y step_x step_y end_x end_y =
   let rec loop_y y =
     let rec loop_x x =
+      let next_x = x +. step_x in
       print_char (if test x y then 48 else 49);
-      if x >= end_x then () else loop_x (x +. step_x)
+      if next_x > end_x then () else loop_x next_x
     in
+    let next_y = y +. step_y in
     loop_x start_x;
     print_newline ();
-    if y >= end_y then () else loop_y (y +. step_y)
+    if next_y > end_y then () else loop_y next_y
   in
   loop_y start_y
 in
