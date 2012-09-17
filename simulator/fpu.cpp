@@ -92,14 +92,46 @@ uint32_t myfsub(uint32_t rs, uint32_t rt)
 	c.f = a.f - b.f;
 	return c.i;
 }
+
 uint32_t myfmul(uint32_t rs, uint32_t rt)
 {
-	conv a, b, c;
-	a.i = rs;
-	b.i = rt;
-	c.f = a.f * b.f;
-	return c.i;
+	unsigned int a = rs, b = rt;
+  unsigned int ah, al, bh, bl;
+  unsigned int hh, hl, lh, m;
+  unsigned int ae, be, exp, exp1;
+  unsigned int sign, is_zero;
+  // stage 1
+  ah = ((a >> 11) & 0xfff) + 0x1000;
+  bh = ((b >> 11) & 0xfff) + 0x1000;
+  al = a & 0x7ff;
+  bl = b & 0x7ff;
+  hh = ah*bh;
+  hl = (ah*bl);
+  lh = (al*bh);
+  ae = (a >> 23) & 0xff;
+  be = (b >> 23) & 0xff;
+  exp = ae == 0 || be == 0 ? 0 : ae + be - 127; // -127+2
+  sign = (a >> 31) ^ (b >> 31);
+  is_zero = (a&0x7fffffff) == 0 || (b&0x7fffffff) == 0;
+
+  // stage 2
+  m = hh + (hl >> 11) + (lh >> 11) + 2;
+  exp1 = exp + 1;
+
+  // stage 3
+  if ((m >> 25) > 0) {
+    exp = exp1;
+    m = m >> 2;
+  } else {
+    exp = exp;
+    m = m >> 1;
+  }
+
+  // inf is disposed to 0
+  if ((exp & 0x100) > 0) { exp = 0; m = 0; }
+  return (sign << 31) + (is_zero ? 0 : (exp << 23) + (m & 0x7fffff));
 }
+
 uint32_t myfdiv(uint32_t rs, uint32_t rt)
 {
 	conv a, b, c;
