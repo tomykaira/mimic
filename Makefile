@@ -7,11 +7,11 @@ LIB_ASM = lib_asm.s
 # 入力ファイルをテキストとして扱う
 # min-rtで、test/min-rt/sld以下の.sldファイルを入力ファイルとしたいときは
 # 普通はこっちにしとけば大体間違いはない
-BINARY =
+#BINARY =
 
 # 入力ファイルをバイナリとして扱う
 # min-rtで、test/min-rt/sldbin以下の.slbinファイルを入力ファイルとしたいときはこっちを使う
-#BINARY = -b
+BINARY = -b
 
 # インライン展開をどの程度行うか
 # 値が大きいほどインライン展開がより深くなされる
@@ -23,10 +23,10 @@ INLINE = --inline 250
 MIN_RT_DIR = test/min-rt/
 
 # min-rtを実行するときの入力ファイル。上で"BINARY ="としたときはこっちを使う
-SLD_PATH = test/min-rt/sld/contest.sld
+#SLD_PATH = test/min-rt/sld/contest.sld
 
 # min-rtを実行するときの入力ファイル。上で"BINARY = -b"としたときはこっちを使う
-# SLD_PATH = test/min-rt/sldbin/contest.sldbin
+SLD_PATH = test/min-rt/sldbin/contest.sldbin
 
 # min-rtを実行するときの出力ファイル
 PPM_PATH = test/min-rt/contest.ppm
