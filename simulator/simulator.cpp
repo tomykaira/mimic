@@ -37,9 +37,10 @@ uint32_t lreg;
 // いいかげんな call stack
 #define CALL_STACK_SIZE 64
 
-#define DEBUG_INSTRUCTION 1
-#define DEBUG_DATAFLOW    1
-#define DEBUG_IO          1
+#define DEBUG_INSTRUCTION 0
+#define DEBUG_DATAFLOW    0
+#define DEBUG_IO          0
+#define NO_DEBUG          1
 
 #define D_INSTRUCTION if (DEBUG_INSTRUCTION) printf
 #define D_DATAFLOW if (DEBUG_DATAFLOW) printf
@@ -475,7 +476,11 @@ int simulate(char* srcPath)
 				D_DATAFLOW("REG: %02X %08X\n", get_rt(inst), IRT);
 				break;
 			case OUTPUTB:
-        D_IO("IO: %c\n", (char)IRT);
+				if (NO_DEBUG) {
+					printf("%c", (char)IRT);
+				} else {
+					D_IO("IO: %c\n", (char)IRT);
+				}
 				break;
 			case HALT:
 				break;
