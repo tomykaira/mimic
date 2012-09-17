@@ -504,7 +504,8 @@ let f oc (Prog(fundefs, e)) =
 	Output.add_stmt (Output.Addi (reg_p1, reg_0, 1));
 	Output.add_stmt (Output.Sub (reg_m1, reg_0, reg_p1));
 	(* EDITED: frame pointer をうえのほうに置いてくる *)
-	Output.add_stmt (Output.Addi (reg_sp, reg_0, 1024)); 
+	Output.add_stmt (Output.Mvhi (reg_sp, 1));
+	Output.add_stmt (Output.Mvlo (reg_sp, 0)); 
 	g oc (NonTail reg_0, e);
 	Output.add_stmt Output.Halt;
 

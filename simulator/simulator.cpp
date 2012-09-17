@@ -218,7 +218,8 @@ int simulate(char* srcPath)
 	conv tmp1;
 
 	// 初期化
-	FR = sizeof(RAM) / 4 - 1;
+	// FR = sizeof(RAM) / 4 - 1;
+	FR = 0;
 	// cerr << "FR = " << FR << endl;
 
 	int internal_stack[CALL_STACK_SIZE];
