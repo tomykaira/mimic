@@ -1,9 +1,22 @@
 #include <stdio.h>
+#include <iostream>
+#include <cstdlib>
+#include <cassert>
 #include "fpu.h"
 
 #define swap(a,b) { int temp = a; a = b; b = temp; }
+#define NOT_IMPLEMENTED {	cerr << "fdiv is not hardware implemented." << endl; exit(1);}
+#define MANTISSA(x) (0x800000 + (x & 0x7fffff))
+#define EXP(x) ((int)((x & 0x7f800000) >> 23)-127)
+#define MAN_TO_FLOAT(x) ((127 << 23) + ((x) & 0x7fffff))
+#define F(x) ((1 << x) - 1)
+#define MANTISSA_ONLY(x) ((((x) & F(23)) + (127 << 23)))
 
 using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef unsigned int ui;
 
 uint32_t myfadd(uint32_t rs, uint32_t rt)
 {
@@ -86,11 +99,7 @@ uint32_t myfadd(uint32_t rs, uint32_t rt)
 
 uint32_t myfsub(uint32_t rs, uint32_t rt)
 {
-	conv a, b, c;
-	a.i = rs;
-	b.i = rt;
-	c.f = a.f - b.f;
-	return c.i;
+	return myfadd(rs, rt ^ 0x80000000);
 }
 
 uint32_t myfmul(uint32_t rs, uint32_t rt)
@@ -134,12 +143,9 @@ uint32_t myfmul(uint32_t rs, uint32_t rt)
 
 uint32_t myfdiv(uint32_t rs, uint32_t rt)
 {
-	conv a, b, c;
-	a.i = rs;
-	b.i = rt;
-	c.f = a.f / b.f;
-	return c.i;
+	NOT_IMPLEMENTED;
 }
+
 uint32_t myfinv(uint32_t rs)
 {
 	conv a, b;
@@ -147,15 +153,30 @@ uint32_t myfinv(uint32_t rs)
 	b.f = 1 / a.f;
 	return b.i;
 }
+
 uint32_t myfsqrt(uint32_t rs)
 {
-	conv a, b;
-	a.i = rs;
-	b.f = sqrt(a.f);
-	return b.i;
+	unsigned int a = rs;
+  assert(! (a&0x80000000)); // not minus
+
+  unsigned int answer;
+  int key = (a >> 14) & F(10);
+  ll a1 = ((a & (1 << 23)) ? MANTISSA(a) : MANTISSA(a) << 1) & F(15);
+
+  ui i_constant = const_table[key] << 1;
+  ui diff = (a1 * inc_table[key]) >> 14;
+
+  ll mantissa = i_constant + diff;
+  int exponent = (63 + ((((a >> 23)&F(8)) + 1) >> 1));
+
+  answer = (exponent << 23) + (mantissa & F(23));
+
+  return answer;
 }
+
 uint32_t myfabs(uint32_t rs)
 {
+	NOT_IMPLEMENTED;
 	conv a, b;
 	a.i = rs;
 	b.f = abs(a.f);
@@ -163,13 +184,11 @@ uint32_t myfabs(uint32_t rs)
 }
 uint32_t myfneg(uint32_t rs)
 {
-	conv a, b;
-	a.i = rs;
-	b.f = -a.f;
-	return b.i;
+	return rs ^ 0x80000000;
 }
 uint32_t myfloor(uint32_t rs)
 {
+	NOT_IMPLEMENTED;
 	conv a, b;
 	a.i = rs;
 	b.f = floor(a.f);
@@ -177,6 +196,7 @@ uint32_t myfloor(uint32_t rs)
 }
 uint32_t myfsin(uint32_t rs)
 {
+	NOT_IMPLEMENTED;
 	conv a, b;
 	a.i = rs;
 	b.f = sin(a.f);
@@ -184,6 +204,7 @@ uint32_t myfsin(uint32_t rs)
 }
 uint32_t myfcos(uint32_t rs)
 {
+	NOT_IMPLEMENTED;
 	conv a, b;
 	a.i = rs;
 	b.f = cos(a.f);
@@ -191,6 +212,7 @@ uint32_t myfcos(uint32_t rs)
 }
 uint32_t myftan(uint32_t rs)
 {
+	NOT_IMPLEMENTED;
 	conv a, b;
 	a.i = rs;
 	b.f = tan(a.f);
@@ -198,6 +220,7 @@ uint32_t myftan(uint32_t rs)
 }
 uint32_t myfatan(uint32_t rs)
 {
+	NOT_IMPLEMENTED;
 	conv a, b;
 	a.i = rs;
 	b.f = atan(a.f);
