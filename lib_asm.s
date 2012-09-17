@@ -183,18 +183,22 @@ min_caml_read_int:
 	add $r3, $r0, $r0
 	# 24 - 31
 	inputb $r4
+	outputb $r4
 	add $r3, $r3, $r4
 	slli $r3, $r3, 8
 	# 16 - 23
 	inputb $r4
+	outputb $r4
 	add $r3, $r3, $r4
 	slli $r3, $r3, 8
 	# 8 - 15
 	inputb $r4
+	outputb $r4
 	add $r3, $r3, $r4
 	slli $r3, $r3, 8
 	# 0 - 7
 	inputb $r4
+	outputb $r4
 	add $r3, $r3, $r4
 	return
 
