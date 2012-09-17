@@ -146,12 +146,27 @@ uint32_t myfdiv(uint32_t rs, uint32_t rt)
 	NOT_IMPLEMENTED;
 }
 
-uint32_t myfinv(uint32_t rs)
-{
-	conv a, b;
-	a.i = rs;
-	b.f = 1 / a.f;
-	return b.i;
+unsigned int finv(uint32_t rs){
+	unsigned int a = rs;
+  int key = (a >> 13) & 0x3ff;
+  int a1=MANTISSA(a)&((1<<13)-1);
+  int e=EXP(a);
+
+  // 初期状態で 23 桁のみ
+  ll b=const_table[key];
+
+  b -= (a1*inc_table[key])>>13;
+
+  // ここは適当かどうか自信がない
+  int be = - e - 1;
+  b<<=1;
+
+  unsigned int answer;
+
+  answer = a&(1LL<<31LL);
+  answer |= ((a & 0x7fffff) == 0 ? be + 128 : be+127)<<23;
+  answer |= (a & 0x7fffff) == 0 ? 0 : b&((1<<23)-1);
+  return answer;
 }
 
 uint32_t myfsqrt(uint32_t rs)

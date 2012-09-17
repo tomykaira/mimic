@@ -6,7 +6,6 @@
 #include <cmath>
 
 typedef union{	uint32_t i; float f;} conv;
-typedef conv fi;
 
 uint32_t myfadd(uint32_t rs, uint32_t rt);
 uint32_t myfsub(uint32_t rs, uint32_t rt);
