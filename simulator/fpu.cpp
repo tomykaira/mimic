@@ -216,7 +216,9 @@ uint32_t myfinv(uint32_t rs)
   answer |= ((a & 0x7fffff) == 0 ? be + 128 : be+127)<<23;
   answer |= (a & 0x7fffff) == 0 ? 0 : b&((1<<23)-1);
 
-  assert(abs((signed)s.i - (signed)answer) < 8);
+  if (!(abs((signed)s.i - (signed)answer) < 8)) {
+	  cerr << "finv " << rs << " should " << s.i << " but " << answer << endl;
+  }
 
   return answer;
 }
@@ -242,7 +244,9 @@ uint32_t myfsqrt(uint32_t rs)
 
   answer = (exponent << 23) + (mantissa & F(23));
 
-  assert(abs(s.i - answer) < 8);
+  if (!(abs((signed)s.i - (signed)answer) < 8)) {
+	  cerr << "fsqrt " << rs << " should " << s.i << " but " << answer << endl;
+  }
 
   return answer;
 }
