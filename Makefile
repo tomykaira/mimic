@@ -53,7 +53,7 @@ architecture-clean:
 
 # globals.mlとmin-rt.mlをコンパイル。min-rt.sとmin-rt.binを作る
 min-rt:
-	cat lib_ml.ml $(MIN_RT_DIR)globals.ml $(MIN_RT_DIR)min-rt.ml > __tmp__.ml
+	cat lib_ml.ml $(MIN_RT_DIR)globals.ml $(MIN_RT_DIR)min-rt-small.ml > __tmp__.ml
 	compiler/min-caml $(BINARY) $(INLINE) __tmp__
 	cd linker; java linker ../lib_asm.s ../__tmp__.s ${abspath $(MIN_RT_DIR)min-rt.s}
 	assembler/assembler $(MIN_RT_DIR)min-rt.s $(MIN_RT_DIR)min-rt.bin
