@@ -5,7 +5,7 @@
 #include "fpu.h"
 
 #define swap(a,b) { int temp = a; a = b; b = temp; }
-#define NOT_IMPLEMENTED {	cerr << "fdiv is not hardware implemented." << endl; exit(1);}
+#define NOT_IMPLEMENTED {  cerr << "fdiv is not hardware implemented." << endl; exit(1);}
 #define MANTISSA(x) (0x800000 + (x & 0x7fffff))
 #define EXP(x) ((int)((x & 0x7f800000) >> 23)-127)
 #define MAN_TO_FLOAT(x) ((127 << 23) + ((x) & 0x7fffff))
@@ -28,44 +28,44 @@ ull fsqrt_table[MAX_KEY];
 
 void load_tables()
 {
-	// not easy to use relative path in C
-	FILE * fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/finv.dat", "r");
-	if (fp) {
-		for (int i = 0; i<MAX_KEY; i++) {
-			if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
-				cerr << "Not enough finv table" << endl;
-			}
-		}
-		if (fclose(fp) != 0) {
-			perror("fclose finv.dat");
-			exit(1);
-		}
-	} else {
-		perror("fopen finv.dat");
-		exit(1);
-	}
+  // not easy to use relative path in C
+  FILE * fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/finv.dat", "r");
+  if (fp) {
+    for (int i = 0; i<MAX_KEY; i++) {
+      if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
+        cerr << "Not enough finv table" << endl;
+      }
+    }
+    if (fclose(fp) != 0) {
+      perror("fclose finv.dat");
+      exit(1);
+    }
+  } else {
+    perror("fopen finv.dat");
+    exit(1);
+  }
 
-	fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/fsqrt.dat", "r");
-	if (fp) {
-		for (int i = 0; i<MAX_KEY; i++) {
-			if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
-				cerr << "Not enough finv table" << endl;
-			}
-		}
-		if (fclose(fp) != 0) {
-			perror("fclose fsqrt.dat");
-			exit(1);
-		}
-	} else {
-		perror("fopen fsqrt.dat");
-		exit(1);
-	}
+  fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/fsqrt.dat", "r");
+  if (fp) {
+    for (int i = 0; i<MAX_KEY; i++) {
+      if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
+        cerr << "Not enough finv table" << endl;
+      }
+    }
+    if (fclose(fp) != 0) {
+      perror("fclose fsqrt.dat");
+      exit(1);
+    }
+  } else {
+    perror("fopen fsqrt.dat");
+    exit(1);
+  }
 }
 
 uint32_t myfadd(uint32_t rs, uint32_t rt)
 {
-	unsigned int a = rs;
-	unsigned int b = rt;
+  unsigned int a = rs;
+  unsigned int b = rt;
   unsigned int ae = (a >> 23) & 0xff, be = (b >> 23) & 0xff, diff, sig = 0, msb;
   int se;
   unsigned long long am, bm, sm, sm_orig, x;
@@ -143,12 +143,12 @@ uint32_t myfadd(uint32_t rs, uint32_t rt)
 
 uint32_t myfsub(uint32_t rs, uint32_t rt)
 {
-	return myfadd(rs, rt ^ 0x80000000);
+  return myfadd(rs, rt ^ 0x80000000);
 }
 
 uint32_t myfmul(uint32_t rs, uint32_t rt)
 {
-	unsigned int a = rs, b = rt;
+  unsigned int a = rs, b = rt;
   unsigned int ah, al, bh, bl;
   unsigned int hh, hl, lh, m;
   unsigned int ae, be, exp, exp1;
@@ -187,16 +187,16 @@ uint32_t myfmul(uint32_t rs, uint32_t rt)
 
 uint32_t myfdiv(uint32_t rs, uint32_t rt)
 {
-	NOT_IMPLEMENTED;
+  NOT_IMPLEMENTED;
 }
 
 uint32_t myfinv(uint32_t rs)
 {
-	conv c, s;
-	c.i = rs;
-	s.f = 1 / c.f;
+  conv c, s;
+  c.i = rs;
+  s.f = 1 / c.f;
 
-	unsigned int a = rs;
+  unsigned int a = rs;
   int key = (a >> 13) & 0x3ff;
   int a1=MANTISSA(a)&((1<<13)-1);
   int e=EXP(a);
@@ -223,11 +223,11 @@ uint32_t myfinv(uint32_t rs)
 
 uint32_t myfsqrt(uint32_t rs)
 {
-	conv c, s;
-	c.i = rs;
-	s.f = sqrt(c.f);
+  conv c, s;
+  c.i = rs;
+  s.f = sqrt(c.f);
 
-	unsigned int a = rs;
+  unsigned int a = rs;
   assert(! (a&0x80000000)); // not minus
 
   unsigned int answer;
@@ -249,53 +249,53 @@ uint32_t myfsqrt(uint32_t rs)
 
 uint32_t myfabs(uint32_t rs)
 {
-	NOT_IMPLEMENTED;
-	conv a, b;
-	a.i = rs;
-	b.f = abs(a.f);
-	return b.i;
+  NOT_IMPLEMENTED;
+  conv a, b;
+  a.i = rs;
+  b.f = abs(a.f);
+  return b.i;
 }
 uint32_t myfneg(uint32_t rs)
 {
-	return rs ^ 0x80000000;
+  return rs ^ 0x80000000;
 }
 uint32_t myfloor(uint32_t rs)
 {
-	NOT_IMPLEMENTED;
-	conv a, b;
-	a.i = rs;
-	b.f = floor(a.f);
-	return b.i;
+  NOT_IMPLEMENTED;
+  conv a, b;
+  a.i = rs;
+  b.f = floor(a.f);
+  return b.i;
 }
 uint32_t myfsin(uint32_t rs)
 {
-	NOT_IMPLEMENTED;
-	conv a, b;
-	a.i = rs;
-	b.f = sin(a.f);
-	return b.i;
+  NOT_IMPLEMENTED;
+  conv a, b;
+  a.i = rs;
+  b.f = sin(a.f);
+  return b.i;
 }
 uint32_t myfcos(uint32_t rs)
 {
-	NOT_IMPLEMENTED;
-	conv a, b;
-	a.i = rs;
-	b.f = cos(a.f);
-	return b.i;
+  NOT_IMPLEMENTED;
+  conv a, b;
+  a.i = rs;
+  b.f = cos(a.f);
+  return b.i;
 }
 uint32_t myftan(uint32_t rs)
 {
-	NOT_IMPLEMENTED;
-	conv a, b;
-	a.i = rs;
-	b.f = tan(a.f);
-	return b.i;
+  NOT_IMPLEMENTED;
+  conv a, b;
+  a.i = rs;
+  b.f = tan(a.f);
+  return b.i;
 }
 uint32_t myfatan(uint32_t rs)
 {
-	NOT_IMPLEMENTED;
-	conv a, b;
-	a.i = rs;
-	b.f = atan(a.f);
-	return b.i;
+  NOT_IMPLEMENTED;
+  conv a, b;
+  a.i = rs;
+  b.f = atan(a.f);
+  return b.i;
 }
