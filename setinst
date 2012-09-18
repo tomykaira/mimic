@@ -3,6 +3,16 @@
 arg=$1
 base=`basename $arg`
 root_log="$base"_simulation.log
+ext=${arg##*.}
+
+if [ $ext = "bin" ]; then
+  echo "file copy"
+  cp $arg ../mips/instruction.dat
+  size=`wc $arg | awk '{ print $1 }'`
+  sed ../mips/instruction_memory.v -e "s/MEM_SIZE=.*;/MEM_SIZE=$size;/" > inst.v
+  mv inst.v ../mips/instruction_memory.v
+  exit
+fi
 
 if [ -f $arg.ml ]; then
   make $arg.bin_f
