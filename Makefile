@@ -26,7 +26,7 @@ MIN_RT_DIR = test/min-rt/
 #SLD_PATH = test/min-rt/sld/contest.sld
 
 # min-rtを実行するときの入力ファイル。上で"BINARY = -b"としたときはこっちを使う
-SLD_PATH = test/min-rt/sldbin/contest.sldbin
+SLD_PATH = test/min-rt/sldbin/eye.sldbin
 
 # min-rtを実行するときの出力ファイル
 PPM_PATH = test/min-rt/contest.ppm
