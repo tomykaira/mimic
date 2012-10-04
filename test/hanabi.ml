@@ -1,5 +1,5 @@
 let pi = 3.141592 in
-let center = 150 in
+let center = 42 in
 let density = 20 in
 
 let rec rangeEach10 s f =
