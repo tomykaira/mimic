@@ -136,6 +136,7 @@ ITOF_NEGATIVE_MAIN:
 min_caml_int_of_float:
 	# $f1 <- 0.0
 	# fset $f1, 0.0
+	dump
 	fmvhi $f1, 0
 	fmvlo $f1, 0
 	fblt $f0, $f1, FTOI_NEGATIVE_MAIN			# if (0.0 <= $f0) goto FTOI_MAIN

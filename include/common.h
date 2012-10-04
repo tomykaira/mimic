@@ -73,6 +73,7 @@
 #define INPUTB (0b111101)
 #define OUTPUTB (0b111110)
 #define HALT (0b111111)
+#define DUMP (0b100111)
 
 using namespace std;
 #endif

@@ -388,6 +388,8 @@ int simulate(char* srcPath)
 				break;
 			case HALT:
 				break;
+			case DUMP:
+				break;
 			default:
 				cerr << "invalid opcode. (opcode = " << (int)opcode << ", funct = " << (int)funct <<  ", pc = " << pc << ")" << endl;
 				break;

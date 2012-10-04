@@ -5,6 +5,7 @@
 
 #define swap(a,b) { int temp = a; a = b; b = temp; }
 #define NOT_IMPLEMENTED(inst_name) {  fprintf(stderr, "%s is not hardware implemented.\n", inst_name); }
+#define DEBUG(x) { ; }
 #define MANTISSA(x) (0x800000 + (x & 0x7fffff))
 #define EXP(x) ((int)((x & 0x7f800000) >> 23)-127)
 #define MAN_TO_FLOAT(x) ((127 << 23) + ((x) & 0x7fffff))
@@ -139,7 +140,10 @@ uint32_t myfadd(uint32_t rs, uint32_t rt)
     se++;
   }
 
-  return (sig << 31) + (se << 23) + (sm & 0x7fffff);
+  uint32_t answer = (sig << 31) + (se << 23) + (sm & 0x7fffff);
+
+  DEBUG(printf("fadd %x %x %x\n", rs, rt, answer));
+  return answer;
 }
 
 uint32_t myfsub(uint32_t rs, uint32_t rt)
@@ -183,7 +187,10 @@ uint32_t myfmul(uint32_t rs, uint32_t rt)
 
   // inf is disposed to 0
   if ((exp & 0x100) > 0) { exp = 0; m = 0; }
-  return (sign << 31) + (is_zero ? 0 : (exp << 23) + (m & 0x7fffff));
+
+  uint32_t answer = (sign << 31) + (is_zero ? 0 : (exp << 23) + (m & 0x7fffff));
+	DEBUG(printf("fmul %x %x %x\n", rs, rt, answer));
+  return answer;
 }
 
 uint32_t myfinv(uint32_t rs)
@@ -217,6 +224,7 @@ uint32_t myfinv(uint32_t rs)
 	  fprintf(stderr, "finv %d should %d but answer %d\n", rs, s.i, answer);
   }
 
+  DEBUG(printf("finv %x %x\n", rs, answer));
   return answer;
 }
 
@@ -252,6 +260,7 @@ uint32_t myfsqrt(uint32_t rs)
 	  fprintf(stderr, "fsqrt %d should %d but answer %d\n", rs, s.i, answer);
   }
 
+  DEBUG(printf("fsqrt %x %x\n", rs, answer));
   return answer;
 }
 

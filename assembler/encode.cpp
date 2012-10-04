@@ -50,6 +50,7 @@ DEFINE_I(_fldi, FLDI);
 DEFINE_R(_inputb, INPUTB, 0, 0);
 DEFINE_R(_outputb, OUTPUTB, 0, 0);
 DEFINE_R(_halt, HALT, 0, 0);
+DEFINE_R(_dump, DUMP, 0, 0);
 
 typedef union
 {
@@ -561,6 +562,15 @@ bool encode(char* instName, char* buffer, map<uint32_t, string>& labelNames, uin
 		if (n == 1)
 		{
 			code = _halt(rs, rt, rd);
+			return true;
+		}
+	}
+	if (eq(instName, "dump"))
+	{
+		int n = sscanf(buffer, form, dummy);
+		if (n == 1)
+		{
+			code = _dump(rs, rt, rd);
 			return true;
 		}
 	}
