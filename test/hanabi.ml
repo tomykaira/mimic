@@ -6,24 +6,26 @@ let rec rangeEach s e f =
   if s >= e then () else (f s; rangeEach (s + 1) e f)
 in
 
-let color r g b =
+let rec color r g b =
   let array = Array.create 3 r in
   (array.(1) <- g; 
    array.(2) <- b;
    array)
 in
-let line() =
+let rec line _ =
   let array = Array.create (center * 2) (color 0 0 0) in
-  rangeEach 0 (center * 2) (fun i -> array.(i) <- color 0 0 0);
+  let rec setColor i = array.(i) <- color 0 0 0 in
+  rangeEach 0 (center * 2) setColor;
   array
 in
 let field =
   let array = Array.create (center * 2) (line()) in
-  rangeEach 0 (center * 2) (fun i -> array.(i) <- line());
+  let rec setLine i = array.(i) <- line() in
+  rangeEach 0 (center * 2) setLine;
   array
 in
 
-let drawPoint x deg =
+let rec drawPoint x deg =
   let rad = (2. *. pi *. float_of_int deg /. float_of_int density) in
   let dist = float_of_int x in
   let dx = int_of_float (dist *. cos rad +. dist *. dist *. 0.02) in
@@ -31,11 +33,12 @@ let drawPoint x deg =
   field.(center + dy).(center + dx) <- color 255 (x * 10) (250-x * 10)
 in
 
-let drawCurve deg =
-  rangeEach 3 25 (fun dist -> drawPoint dist deg)
+let rec drawCurve deg =
+  let rec callDraw dist = drawPoint dist deg in
+  rangeEach 3 25 callDraw
 in
 
-let print_triple triple =
+let rec print_triple triple =
   print_int triple.(0);
   print_char 32;
   print_int triple.(1);
@@ -58,9 +61,8 @@ let _ = (
 
   rangeEach 0 density drawCurve; 
 
-  rangeEach 0 (center * 2) (fun x ->
-    rangeEach 0 (center * 2) (fun y ->
-      print_triple field.(y).(x)
-    )
-  )
+  let rec drawLine x =
+    let rec printPoint y = print_triple field.(y).(x) in
+    rangeEach 0 (center * 2) printPoint in
+  rangeEach 0 (center * 2) drawLine
 ) in 0
