@@ -2,8 +2,23 @@ let pi = 3.141592 in
 let center = 150 in
 let density = 20 in
 
+let rec rangeEach10 s f =
+  f (s + 0);
+  f (s + 1);
+  f (s + 2);
+  f (s + 3);
+  f (s + 4);
+  f (s + 5);
+  f (s + 6);
+  f (s + 7);
+  f (s + 8);
+  f (s + 9)
+in
+
 let rec rangeEach s e f =
-  if s >= e then () else (f s; rangeEach (s + 1) e f)
+  if s + 9 < e then (rangeEach10 s f; rangeEach (s + 10) e f)
+  else if s < e then (f s; rangeEach (s + 1) e f)
+  else ()
 in
 
 let rec color r g b =
