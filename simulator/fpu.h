@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <float.h>
-#include <cmath>
+#include <math.h>
 
 typedef union{	uint32_t i; float f;} conv;
 

@@ -254,10 +254,10 @@ uint32_t myfsqrt(uint32_t rs)
 uint32_t myfabs(uint32_t rs)
 {
   NOT_IMPLEMENTED;
-  conv a, b;
-  a.i = rs;
-  b.f = abs(a.f);
-  return b.i;
+  if (rs & 0x80000000)
+	  return myfneg(rs);
+  else
+	  return rs;
 }
 uint32_t myfneg(uint32_t rs)
 {
