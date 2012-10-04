@@ -4,7 +4,7 @@
 #include "fpu.h"
 
 #define swap(a,b) { int temp = a; a = b; b = temp; }
-#define NOT_IMPLEMENTED {  /* cerr << "fdiv is not hardware implemented." << endl; exit(1); */ }
+#define NOT_IMPLEMENTED(inst_name) {  fprintf(stderr, "%s is not hardware implemented.\n", inst_name); }
 #define MANTISSA(x) (0x800000 + (x & 0x7fffff))
 #define EXP(x) ((int)((x & 0x7f800000) >> 23)-127)
 #define MAN_TO_FLOAT(x) ((127 << 23) + ((x) & 0x7fffff))
@@ -257,7 +257,7 @@ uint32_t myfsqrt(uint32_t rs)
 
 uint32_t myfabs(uint32_t rs)
 {
-  NOT_IMPLEMENTED;
+  // NOT_IMPLEMENTED("fabs");
   if (rs & 0x80000000)
 	  return myfneg(rs);
   else
@@ -269,7 +269,7 @@ uint32_t myfneg(uint32_t rs)
 }
 uint32_t myfloor(uint32_t rs)
 {
-  NOT_IMPLEMENTED;
+  NOT_IMPLEMENTED("floor");
   conv a, b;
   a.i = rs;
   b.f = floor(a.f);
@@ -277,7 +277,7 @@ uint32_t myfloor(uint32_t rs)
 }
 uint32_t myfsin(uint32_t rs)
 {
-  NOT_IMPLEMENTED;
+  NOT_IMPLEMENTED("sin");
   conv a, b;
   a.i = rs;
   b.f = sin(a.f);
@@ -285,7 +285,7 @@ uint32_t myfsin(uint32_t rs)
 }
 uint32_t myfcos(uint32_t rs)
 {
-  NOT_IMPLEMENTED;
+  NOT_IMPLEMENTED("cos");
   conv a, b;
   a.i = rs;
   b.f = cos(a.f);
@@ -293,7 +293,7 @@ uint32_t myfcos(uint32_t rs)
 }
 uint32_t myftan(uint32_t rs)
 {
-  NOT_IMPLEMENTED;
+  NOT_IMPLEMENTED("tan");
   conv a, b;
   a.i = rs;
   b.f = tan(a.f);
@@ -301,7 +301,7 @@ uint32_t myftan(uint32_t rs)
 }
 uint32_t myfatan(uint32_t rs)
 {
-  NOT_IMPLEMENTED;
+  NOT_IMPLEMENTED("atan");
   conv a, b;
   a.i = rs;
   b.f = atan(a.f);
