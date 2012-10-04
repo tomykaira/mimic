@@ -23,8 +23,12 @@ typedef unsigned int ui;
 ull finv_table[MAX_KEY];
 ull fsqrt_table[MAX_KEY];
 
+static int initialized = 0;
+
 void load_tables()
 {
+	if (initialized) return;
+	initialized = 1;
   // not easy to use relative path in C
   FILE * fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/finv.dat", "r");
   if (fp) {
@@ -184,6 +188,7 @@ uint32_t myfmul(uint32_t rs, uint32_t rt)
 
 uint32_t myfinv(uint32_t rs)
 {
+	load_tables();
   conv c, s;
   c.i = rs;
   s.f = 1 / c.f;
@@ -222,6 +227,8 @@ uint32_t myfdiv(uint32_t rs, uint32_t rt)
 
 uint32_t myfsqrt(uint32_t rs)
 {
+	load_tables();
+
   conv c, s;
   c.i = rs;
   s.f = sqrt(c.f);
