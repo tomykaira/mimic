@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <cstdlib>
-#include <cassert>
+#include <stdlib.h>
+#include <assert.h>
 #include "fpu.h"
 
 #define swap(a,b) { int temp = a; a = b; b = temp; }
@@ -16,8 +16,6 @@
 #define INC(table) ((table) & F(13))
 #define MAX_KEY 1024
 
-using namespace std;
-
 typedef long long ll;
 typedef unsigned long long ull;
 typedef unsigned int ui;
@@ -32,7 +30,7 @@ void load_tables()
   if (fp) {
     for (int i = 0; i<MAX_KEY; i++) {
       if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
-	      printf("Not enough finv table\n");
+	      fprintf(stderr, "Not enough finv table\n");
       }
     }
     if (fclose(fp) != 0) {
@@ -48,7 +46,7 @@ void load_tables()
   if (fp) {
     for (int i = 0; i<MAX_KEY; i++) {
       if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
-	      printf("Not enough finv table\n");
+	      fprintf(stderr, "Not enough finv table\n");
       }
     }
     if (fclose(fp) != 0) {
@@ -211,7 +209,7 @@ uint32_t myfinv(uint32_t rs)
   answer |= (a & 0x7fffff) == 0 ? 0 : b&((1<<23)-1);
 
   if (!(abs((signed)s.i - (signed)answer) < 8)) {
-	  printf("finv %d should %d but answer %d\n", rs, s.i, answer);
+	  fprintf(stderr, "finv %d should %d but answer %d\n", rs, s.i, answer);
   }
 
   return answer;
@@ -244,7 +242,7 @@ uint32_t myfsqrt(uint32_t rs)
   answer = (exponent << 23) + (mantissa & F(23));
 
   if (!(abs((signed)s.i - (signed)answer) < 8)) {
-	  printf("fsqrt %d should %d but answer %d\n", rs, s.i, answer);
+	  fprintf(stderr, "fsqrt %d should %d but answer %d\n", rs, s.i, answer);
   }
 
   return answer;
