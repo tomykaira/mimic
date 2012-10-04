@@ -1,11 +1,10 @@
 #include <stdio.h>
-#include <iostream>
 #include <cstdlib>
 #include <cassert>
 #include "fpu.h"
 
 #define swap(a,b) { int temp = a; a = b; b = temp; }
-#define NOT_IMPLEMENTED {  cerr << "fdiv is not hardware implemented." << endl; exit(1);}
+#define NOT_IMPLEMENTED {  /* cerr << "fdiv is not hardware implemented." << endl; exit(1); */ }
 #define MANTISSA(x) (0x800000 + (x & 0x7fffff))
 #define EXP(x) ((int)((x & 0x7f800000) >> 23)-127)
 #define MAN_TO_FLOAT(x) ((127 << 23) + ((x) & 0x7fffff))
@@ -33,7 +32,7 @@ void load_tables()
   if (fp) {
     for (int i = 0; i<MAX_KEY; i++) {
       if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
-        cerr << "Not enough finv table" << endl;
+	      printf("Not enough finv table\n");
       }
     }
     if (fclose(fp) != 0) {
@@ -49,7 +48,7 @@ void load_tables()
   if (fp) {
     for (int i = 0; i<MAX_KEY; i++) {
       if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
-        cerr << "Not enough finv table" << endl;
+	      printf("Not enough finv table\n");
       }
     }
     if (fclose(fp) != 0) {
@@ -185,11 +184,6 @@ uint32_t myfmul(uint32_t rs, uint32_t rt)
   return (sign << 31) + (is_zero ? 0 : (exp << 23) + (m & 0x7fffff));
 }
 
-uint32_t myfdiv(uint32_t rs, uint32_t rt)
-{
-  NOT_IMPLEMENTED;
-}
-
 uint32_t myfinv(uint32_t rs)
 {
   conv c, s;
@@ -217,10 +211,15 @@ uint32_t myfinv(uint32_t rs)
   answer |= (a & 0x7fffff) == 0 ? 0 : b&((1<<23)-1);
 
   if (!(abs((signed)s.i - (signed)answer) < 8)) {
-	  cerr << "finv " << rs << " should " << s.i << " but " << answer << endl;
+	  printf("finv %d should %d but answer %d\n", rs, s.i, answer);
   }
 
   return answer;
+}
+
+uint32_t myfdiv(uint32_t rs, uint32_t rt)
+{
+	return myfmul(rs, myfinv(rt));
 }
 
 uint32_t myfsqrt(uint32_t rs)
@@ -245,7 +244,7 @@ uint32_t myfsqrt(uint32_t rs)
   answer = (exponent << 23) + (mantissa & F(23));
 
   if (!(abs((signed)s.i - (signed)answer) < 8)) {
-	  cerr << "fsqrt " << rs << " should " << s.i << " but " << answer << endl;
+	  printf("fsqrt %d should %d but answer %d\n", rs, s.i, answer);
   }
 
   return answer;
