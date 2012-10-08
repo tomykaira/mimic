@@ -28,10 +28,14 @@ static int initialized = 0;
 
 void load_tables()
 {
-	if (initialized) return;
-	initialized = 1;
+  if (initialized) return;
+  initialized = 1;
+  
   // not easy to use relative path in C
+  // !! ディレクトリ構成が変わると問題になる
   FILE * fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/finv.dat", "r");
+  if(!fp)
+    fp = fopen("/Users/natori/study/mimic/simulator/finv.dat", "r");
   if (fp) {
     for (int i = 0; i<MAX_KEY; i++) {
       if (fscanf(fp, "%llx\n", &finv_table[i]) == EOF) {
@@ -47,7 +51,10 @@ void load_tables()
     exit(1);
   }
 
+  // !! ディレクトリ構成が変わると問題になる
   fp = fopen("/home/tomita/programs/cpu/mimic5/simulator/fsqrt.dat", "r");
+  if(!fp)
+    fp = fopen("/Users/natori/study/mimic/simulator/fsqrt.dat", "r");
   if (fp) {
     for (int i = 0; i<MAX_KEY; i++) {
       if (fscanf(fp, "%llx\n", &fsqrt_table[i]) == EOF) {
