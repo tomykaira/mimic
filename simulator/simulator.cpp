@@ -82,7 +82,7 @@ uint32_t lreg;
 
 // 停止命令か
 
-#define isHalt(opcode, funct) (opcode == 0b111111)
+#define isHalt(opcode, funct) (opcode == HALT)
 
 // 発行命令数
 long long unsigned cnt;
